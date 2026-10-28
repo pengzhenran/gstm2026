@@ -1172,7 +1172,7 @@ function renderAlluvial(){
     arr.forEach(n => { n.h = n.count * scale; n.y = y; y += n.h + GAP; });
   };
   layout(sessions); layout(methods); layout(datas);
-  const xs = { s: 76, m: 548, d: 1032 };
+  const xs = { s: 120, m: 520, d: 880 };
   const ns = 'http://www.w3.org/2000/svg';
   const add = (tag, attrs = {}) => { const e = document.createElementNS(ns, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
   svg.innerHTML = '';
@@ -1229,12 +1229,12 @@ function renderAlluvial(){
     title.textContent = f.m.key + ' → ' + f.d.key + ' · ' + f.n;
     p.appendChild(title); linkGroup.appendChild(p);
   });
-  const node = (x, n, align, color, label) => {
+  const node = (x, n, align, color, label, dx = 0) => {
     const r = document.createElementNS(ns, 'rect');
     r.setAttribute('x', x); r.setAttribute('y', n.y); r.setAttribute('width', NW); r.setAttribute('height', Math.max(2, n.h));
     r.setAttribute('fill', color); r.setAttribute('rx', 1); nodeGroup.appendChild(r);
     const t = document.createElementNS(ns, 'text');
-    const tx = align === 'left' ? x - 8 : align === 'above' ? x + NW / 2 : x + NW + 8;
+    const tx = align === 'left' ? x - 8 - dx : align === 'above' ? x + NW / 2 : x + NW + 8;
     const ty = align === 'above' ? n.y - 12 : n.y + Math.min(n.h, 18) / 2 + 3;
     t.setAttribute('x', tx); t.setAttribute('y', ty);
     t.setAttribute('text-anchor', align === 'left' ? 'end' : align === 'above' ? 'middle' : 'start');
@@ -1242,7 +1242,7 @@ function renderAlluvial(){
     t.textContent = label + ' ' + n.count;
     nodeGroup.appendChild(t);
   };
-  sessions.forEach(n => node(xs.s, n, 'left', '#25303d', n.label));
+  sessions.forEach((n, i) => node(xs.s, n, 'left', '#25303d', n.label, i % 2 && n.h < 14 ? 38 : 0));
   methods.forEach(n => node(xs.m, n, 'above', n.color, n.label));
   datas.forEach(n => node(xs.d, n, 'right', '#25303d', n.label));
   const legend = $('#alluvLegend');
