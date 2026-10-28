@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="is-loading">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -8,11 +8,28 @@
 <meta name="theme-color" content="#06080d" />
 <link rel="icon" href="assets/favicon.png" />
 <link rel="preload" href="fonts/f2.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="modulepreload" href="js/app.js" />
+<link rel="modulepreload" href="vendor/three.module.js" />
+<link rel="modulepreload" href="vendor/three.core.js" />
 <link rel="stylesheet" href="fonts/fonts.css" />
 <link rel="stylesheet" href="css/styles.css" />
 <link rel="stylesheet" href="css/readability.css" />
+<style>
+  /* Critical boot styles: keep the page dark and locked even if the main CSS is slow. */
+  html.is-loading,html.is-loading body{overflow:hidden;height:100%}
+  .loader{position:fixed;inset:0;z-index:300;background:#06080d;color:#f1eee7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+  .loader.done{opacity:0;visibility:hidden;transition:opacity .8s,visibility .8s}
+  .loader-brand{font-family:Georgia,"Times New Roman",serif;font-size:3rem;line-height:1}
+  .loader-brand span{color:#e6bb63;font-style:italic;margin-left:.08em}
+  .loader-meta,.loader-status{font-family:Consolas,monospace;font-size:.6rem;letter-spacing:.18em;color:#aab3c1}
+  .loader-progress{width:min(340px,62vw);height:2px;background:rgba(241,238,231,.14)}
+  .loader-progress i{display:block;width:0;height:100%;background:#e6bb63}
+  .loader-status{display:flex;justify-content:space-between;width:min(340px,62vw)}
+  .loader-status span:first-child{color:#e6bb63}
+</style>
 </head>
-<body>
+<body class="is-loading">
+<noscript><style>html.is-loading,html.is-loading body{overflow:auto;height:auto}.loader{display:none}</style></noscript>
 
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader-orbit"><i></i><i></i><span></span></div>
@@ -695,11 +712,17 @@
   setTimeout(function(){
     var l = document.getElementById('loader');
     if (!l || l.classList.contains('done')) return;
+    var s = l.querySelector('.loader-status span:last-child');
+    if (s) s.textContent = 'STILL LOADING · CHECK CONNECTION';
+  }, 5000);
+  setTimeout(function(){
+    var l = document.getElementById('loader');
+    if (!l || l.classList.contains('done')) return;
     l.classList.add('done');
     document.body.classList.add('loaded');
     document.documentElement.classList.remove('is-loading');
     document.body.classList.remove('is-loading');
-  }, 10000);
+  }, 12000);
 </script>
 <script type="module" src="js/app.js"></script>
 </body>
