@@ -14,15 +14,58 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
    0. loader / smooth scroll / chrome
    ------------------------------------------------------------ */
 const loader = $('#loader');
-function hideLoader(){ loader.classList.add('done'); }
-window.addEventListener('load', () => setTimeout(hideLoader, 520));
-setTimeout(hideLoader, 4200);
+const loaderBar = $('#loaderBar');
+const loaderPct = $('#loaderPct');
+const rootEl = document.documentElement;
+rootEl.classList.add('is-loading');
+document.body.classList.add('is-loading');
+
+const boot = { fonts: false, hero: false, started: performance.now(), done: false };
+function setLoad(p){
+  if (loaderBar) loaderBar.style.width = p + '%';
+  if (loaderPct) loaderPct.textContent = String(Math.round(p)).padStart(2, '0');
+}
+function hideLoader(){
+  if (boot.done) return;
+  boot.done = true;
+  setLoad(100);
+  document.body.classList.add('loaded');
+  loader.classList.add('done');
+  lenis?.start();
+  setTimeout(() => {
+    rootEl.classList.remove('is-loading');
+    document.body.classList.remove('is-loading');
+    loader.remove();
+  }, 620);
+}
+function maybeDone(){
+  if (boot.done) return;
+  if (!boot.fonts || !boot.hero) return;
+  if (performance.now() - boot.started < 1400) return;
+  setLoad(100);
+  setTimeout(hideLoader, 180);
+}
+function markHeroReady(){
+  boot.hero = true;
+  setLoad(84);
+  maybeDone();
+}
+window.__markHeroReady = markHeroReady;
+setLoad(12);
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => { boot.fonts = true; setLoad(58); maybeDone(); });
+} else {
+  boot.fonts = true;
+}
+setTimeout(markHeroReady, 8000);
+setTimeout(() => { boot.fonts = boot.hero = true; hideLoader(); }, 11000);
 
 let lenis = null;
 if (window.Lenis && !REDUCED) {
   lenis = new window.Lenis({ duration: 1.15, smoothWheel: true, wheelMultiplier: 0.95, touchMultiplier: 1.4 });
   const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
   requestAnimationFrame(raf);
+  lenis.stop();
 }
 
 const topbar = $('#topbar');
@@ -115,11 +158,11 @@ if (heroStats) {
    ------------------------------------------------------------ */
 async function initHero(){
   const canvas = $('#heroCanvas');
-  if (!canvas || REDUCED) return;
+  if (!canvas || REDUCED) { window.__markHeroReady?.(); return; }
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
-  } catch(e) { canvas.style.display = 'none'; return; }
+  } catch(e) { canvas.style.display = 'none'; window.__markHeroReady?.(); return; }
 
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
   const scene = new THREE.Scene();
@@ -279,13 +322,13 @@ async function initHero(){
     camera.updateProjectionMatrix();
     uniforms.uSize.value = mobile ? 9 : 11;
     if (mobile) {
-      root.position.set(0, 1.1, 0);
-      root.scale.setScalar(0.92);
-      camera.position.z = 8.6;
+      root.position.set(0, .95, 0);
+      root.scale.setScalar(1.0);
+      camera.position.z = 8.4;
     } else {
-      root.position.set(w > 1600 ? 3.05 : 2.85, 0.22, 0);
-      root.scale.setScalar(0.74);
-      camera.position.z = 7.6;
+      root.position.set(w > 1600 ? 3.1 : 2.95, 0.18, 0);
+      root.scale.setScalar(0.86);
+      camera.position.z = 7.35;
     }
   }
   layout();
@@ -327,7 +370,9 @@ async function initHero(){
     const fade = clamp(1 - sy / (innerHeight * .9), 0, 1);
     canvas.style.opacity = fade.toFixed(3);
     renderer.render(scene, camera);
+    if (!heroFirstFrame) { heroFirstFrame = true; window.__markHeroReady?.(); }
   }
+  let heroFirstFrame = false;
   frame();
 }
 initHero();
@@ -807,6 +852,11 @@ function openPaper(n){
     </div>`;
   if (typeof dialog.showModal === 'function') { if (!dialog.open) dialog.showModal(); }
   else dialog.setAttribute('open', '');
+  document.body.classList.add('dialog-open');
+  if (lenis) lenis.stop();
+  content.scrollTop = 0;
+  dialog.scrollTop = 0;
+  requestAnimationFrame(() => { content.scrollTop = 0; });
   const copy = $('#copyCite');
   if (copy) copy.addEventListener('click', async () => {
     const cite = `${p.authors}: ${p.title}, GRACE/GRACE-FO Science Team Meeting 2026, Potsdam, Germany, 13–15 Oct 2026, GSTM2026-${p.n}, ${doi}, 2026.`;
@@ -817,8 +867,19 @@ function openPaper(n){
 $$('.chip[data-paper]').forEach(chip => chip.addEventListener('click', () => openPaper(+chip.dataset.paper)));
 
 const dialog = $('#paperDialog');
-$('#dialogClose').addEventListener('click', () => dialog.close());
-dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+function closePaper(){
+  if (dialog.open) dialog.close();
+  document.body.classList.remove('dialog-open');
+  if (lenis) lenis.start();
+}
+$('#dialogClose').addEventListener('click', closePaper);
+dialog.addEventListener('click', e => { if (e.target === dialog) closePaper(); });
+dialog.addEventListener('close', () => {
+  document.body.classList.remove('dialog-open');
+  if (lenis) lenis.start();
+});
+dialog.addEventListener('wheel', e => e.stopPropagation(), { passive: true });
+dialog.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
 
 if (grid) {
   buildFilters();

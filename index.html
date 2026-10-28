@@ -18,6 +18,8 @@
   <div class="loader-orbit"><i></i><i></i><span></span></div>
   <div class="loader-brand">GSTM<span>2026</span></div>
   <div class="loader-meta">GRACE / GRACE-FO SCIENCE TEAM MEETING</div>
+  <div class="loader-progress"><i id="loaderBar"></i></div>
+  <div class="loader-status"><span id="loaderPct">00</span><span>INITIALIZING GRAVITY FIELD</span></div>
 </div>
 
 <div class="grain" aria-hidden="true"></div>
@@ -681,13 +683,24 @@
 
 <dialog class="paper-dialog" id="paperDialog">
   <button class="dialog-close" id="dialogClose" aria-label="关闭">×</button>
-  <div class="dialog-content" id="dialogContent"></div>
+  <div class="dialog-content" id="dialogContent" data-lenis-prevent></div>
 </dialog>
 
 <noscript><div class="noscript">本页面需要 JavaScript 才能呈现交互图表与摘要检索。</div></noscript>
 
 <script src="data.js"></script>
 <script src="vendor/lenis.min.js"></script>
+<script>
+  // If the module never boots (network/WebGL failure), do not leave the page locked.
+  setTimeout(function(){
+    var l = document.getElementById('loader');
+    if (!l || l.classList.contains('done')) return;
+    l.classList.add('done');
+    document.body.classList.add('loaded');
+    document.documentElement.classList.remove('is-loading');
+    document.body.classList.remove('is-loading');
+  }, 10000);
+</script>
 <script type="module" src="js/app.js"></script>
 </body>
 </html>
