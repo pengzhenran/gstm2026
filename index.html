@@ -539,10 +539,10 @@
           </div>
           <div>
             <p class="anatomy-lede">
-              把 91 篇摘要按主题、session、机构和作者数重新切一遍，会看到几个和会议叙事不完全一样的结构。
-              下面四张图不是新的观测结果，是对摘要文本的二次统计。
+              保留三张图：第一张看主题怎样交叉，第二张把 91 篇论文放进同一个语义空间，
+              第三张看 session、方法和数据域之间怎么流动。
             </p>
-            <p class="micro">Multi-label. 主题计数不互斥；机构计数按论文涉及的单位计，一篇可计多个机构。</p>
+            <p class="micro">三张图都是对摘要文本的二次统计，不是新的观测结果。</p>
           </div>
         </div>
 
@@ -557,47 +557,35 @@
             <p class="an-cap">读法：行与列交叉 = 同时提到两个主题的论文数。对角线不填。数据来源：91 篇摘要的标签。</p>
           </article>
 
-          <article class="an-card" data-reveal>
-            <div class="an-head"><span class="an-no">FIG. B</span><h3>20 篇的 A.2，19 篇的 B.4</h3><span class="an-note">session size</span></div>
+          <article class="an-card an-wide domain-card" data-reveal>
+            <div class="an-head"><span class="an-no">FIG. B</span><h3>91 篇论文的领域图</h3><span class="an-note">TF-IDF · cosine · PCA</span></div>
             <p class="an-copy">
-              A.2 是最大的 session，20 篇；B.4 水文 19 篇；A.3 下一代任务 18 篇。poster 主要集中在 A.2、A.3 和 B.4，
-              下一代任务并不只是主会场的口头报告。
+              把题目、摘要、主题标签，以及方法和数据词放进同一个特征空间。方法词包括 SLR、GNSS、Kalman、mascon、L1B、U-Net，
+              数据词包括 TWS、groundwater、ice sheet、sea level。位置越近，文本越相似；颜色是主导主题，
+              金色描边表示提到未来任务，连线指向相似度最高的邻居。它不画机构，也不画国家，只看这 91 篇在说什么、用什么做。
             </p>
-            <div class="an-bars" id="sessionBars"></div>
-            <div class="an-legend"><span><i class="oral"></i>oral</span><span><i class="poster"></i>poster</span></div>
-            <p class="an-cap">B.4 的 19 篇里 18 篇谈极端事件；A.3 的 18 篇里有 5 篇是 poster。</p>
+            <div class="domain-wrap"><svg id="domainMap" viewBox="0 0 1200 640" role="img" aria-label="91 篇 GSTM2026 摘要的领域相似度图"></svg></div>
+            <div class="domain-legend" id="domainLegend"></div>
+            <p class="an-cap">
+              构建：题目×2 + 摘要 + 主题标签 + 方法/数据词典 → TF-IDF → 余弦相似度 →
+              对 91×91 相似度矩阵做中心化 PCA 投影。位置表示文本相似度，不是地理坐标。
+              28 篇提到未来任务，其中 20 篇同时谈水文；金色描边把这层叠加标出来。
+            </p>
           </article>
 
-          <article class="an-card" data-reveal>
-            <div class="an-head"><span class="an-no">FIG. C</span><h3>谁在写这些摘要</h3><span class="an-note">top institutions</span></div>
+          <article class="an-card an-wide" data-reveal>
+            <div class="an-head"><span class="an-no">FIG. C</span><h3>研究流向：session → 方法 → 数据域</h3><span class="an-note">alluvial · 91 papers</span></div>
             <p class="an-copy">
-              GFZ 19 篇、NASA JPL 17 篇、Toulouse / CNES 11 篇排在前面。前三个机构加起来是 47 次机构出现，
-              但 91 篇论文分布在 21 个国家，集中度和多样性同时存在。
+              每篇论文按主导方法归入一类，再按主导数据域归入一类。流宽是论文数。
+              这样能看出 A.3 的任务/传感器工作最后落到哪些数据域，也能看出 B.4 的水文论文主要通过反演、同化还是机器学习来做。
             </p>
-            <div class="an-bars inst" id="institutionBars"></div>
-            <p class="an-cap">一篇论文可涉及多个机构，因此合计大于 91。国家前四：US 44、DE 34、FR 12、NL 7。</p>
-          </article>
-
-          <article class="an-card" data-reveal>
-            <div class="an-head"><span class="an-no">FIG. D</span><h3>合作规模：平均 5.5 位作者</h3><span class="an-note">authors per paper</span></div>
-            <p class="an-copy">
-              30 篇只有 1—3 位作者，33 篇 4—6 位，28 篇 7 位及以上；最长的一篇有 29 位作者。
-              大地测量正在变成一种团队工作，尤其是任务状态、再处理和多机构联合反演。
+            <div class="alluv-wrap"><svg id="alluvMap" viewBox="0 0 1200 620" role="img" aria-label="session、方法与数据域之间的论文流向"></svg></div>
+            <div class="alluv-legend" id="alluvLegend"></div>
+            <p class="an-cap">
+              读法：A.3 的 18 篇里 15 篇归入任务/传感器，14 篇落到水/陆地；B.4 的 19 篇全部落到水/陆地，
+              方法却分散在反演 7、数据/业务 5、机器学习 3、任务 2、参考 2。
+              每篇只归入一个方法族和一个数据域，所以每条流 = 1 篇论文，总和 91。分类是主导归类，不是多标签。
             </p>
-            <div class="an-bars authors" id="authorBars"></div>
-            <p class="an-cap">按作者字符串中的逗号计数，仅用于分布比较。</p>
-          </article>
-
-          <article class="an-card" data-reveal>
-            <div class="an-head"><span class="an-no">NOTE</span><h3>这些数字不能说明什么</h3><span class="an-note">limits</span></div>
-            <p class="an-copy">
-              四张图都是对摘要文本的二次统计，不是对科学质量的评分。看的时候要记住三个口径。
-            </p>
-            <ul class="an-list">
-              <li><b>主题是多标签。</b>68 篇提到数据产品，不等于 68 篇都在做产品；它们可能只是用了某个版本。</li>
-              <li><b>机构会重复计数。</b>一篇论文可涉及多个单位；“UK universities”这类聚合项会低估单个机构。</li>
-              <li><b>作者数是近似值。</b>按逗号切分，未处理集体作者；29 位作者的那篇是大型任务署名。</li>
-            </ul>
           </article>
         </div>
 

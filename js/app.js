@@ -911,6 +911,344 @@ function renderAnatomy(){
   }
 }
 
+function renderDomainMap(){
+  const svg = $('#domainMap');
+  if (!svg) return;
+  const N = ITEMS.length;
+  const W = 1200, H = 640, PAD = 56;
+  const stop = new Set('the and for with from that this these those are was were has have had not but its their they we our using used use into over under between within during than then also such can may will would could should about across after before more most other some each both all any only own same very just because while where when what which who whom whose how why is are be been being do does did doing a an of to in on at by as or if it it’s'.split(/\s+/));
+  const methods = ['grace-c','nggm','magic','slr','vlbi','gnss','gps','kalman','mascon','spherical harmonic','least squares','tikhonov','svd','lstm','mlp','bilstm','u-net','random forest','machine learning','deep learning','neural network','inversion','assimilation','stacked','l1b','l2','l3','l4','quicklook','accelerometer','laser ranging','interferometry','clock','cold atom','gravimetry','altimetry','argo','downscaling','filter','eof','empirical orthogonal','bias correction','regularization','joint inversion','data assimilation','degree 90','gaussian'];
+  const dataWords = ['tws','groundwater','lake','reservoir','ice sheet','glacier','sea level','ocean','atmosphere','aod1b','precipitation','soil moisture','drought','flood','hydrology','cryosphere','solid earth','gia','reference frame','trf','orbit','mascon','level-2','terrestrial water storage','water storage','mass balance','sea-level','groundwater storage'];
+  const tokenize = (it) => {
+    const base = (it.title + ' ' + it.title + ' ' + it.text + ' ' + (it.tags || []).join(' ') + ' ' + (it.tags || []).join(' ')).toLowerCase();
+    const toks = base.match(/[a-z][a-z0-9-]{2,}/g) || [];
+    const extra = [];
+    for (const term of methods.concat(dataWords)) {
+      if (base.includes(term)) {
+        const parts = term.split(/\s+/);
+        extra.push(...parts, ...parts);
+      }
+    }
+    return toks.concat(extra).filter(t => !stop.has(t));
+  };
+  const docs = ITEMS.map(tokenize);
+  const df = {};
+  docs.forEach(toks => [...new Set(toks)].forEach(t => { df[t] = (df[t] || 0) + 1; }));
+  const vocab = Object.keys(df).filter(t => df[t] >= 2 && df[t] <= 80);
+  const index = new Map(vocab.map((t, i) => [t, i]));
+  const vecs = docs.map(toks => {
+    const tf = new Map();
+    toks.forEach(t => { if (index.has(t)) tf.set(t, (tf.get(t) || 0) + 1); });
+    const v = new Float64Array(vocab.length);
+    let norm = 0;
+    for (const [t, n] of tf) {
+      const i = index.get(t);
+      const w = (1 + Math.log(n)) * Math.log((N + 1) / (df[t] + 1));
+      v[i] = w; norm += w * w;
+    }
+    norm = Math.sqrt(norm) || 1;
+    for (let i = 0; i < v.length; i++) v[i] /= norm;
+    return v;
+  });
+  const sim = Array.from({ length: N }, () => new Float64Array(N));
+  for (let i = 0; i < N; i++) {
+    sim[i][i] = 1;
+    for (let j = i + 1; j < N; j++) {
+      let s = 0;
+      const a = vecs[i], b = vecs[j];
+      for (let k = 0; k < vocab.length; k++) s += a[k] * b[k];
+      sim[i][j] = sim[j][i] = s;
+    }
+  }
+  const row = new Float64Array(N), col = new Float64Array(N);
+  let grand = 0;
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) { row[i] += sim[i][j]; col[j] += sim[i][j]; grand += sim[i][j]; }
+  for (let i = 0; i < N; i++) { row[i] /= N; col[i] /= N; }
+  grand /= N * N;
+  const G = Array.from({ length: N }, () => new Float64Array(N));
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) G[i][j] = sim[i][j] - row[i] - col[j] + grand;
+
+  function topVec(M) {
+    let v = new Float64Array(N);
+    for (let i = 0; i < N; i++) v[i] = Math.sin(i * 12.9898) * 43758.5453 % 1 + .1;
+    let norm = Math.hypot(...v) || 1;
+    for (let i = 0; i < N; i++) v[i] /= norm;
+    let lambda = 0;
+    for (let it = 0; it < 180; it++) {
+      const w = new Float64Array(N);
+      for (let i = 0; i < N; i++) { let s = 0; for (let j = 0; j < N; j++) s += M[i][j] * v[j]; w[i] = s; }
+      norm = Math.hypot(...w) || 1;
+      for (let i = 0; i < N; i++) w[i] /= norm;
+      lambda = 0; for (let i = 0; i < N; i++) lambda += v[i] * w[i] * norm;
+      v = w;
+    }
+    return { v, lambda };
+  }
+  const e1 = topVec(G);
+  for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) G[i][j] -= e1.lambda * e1.v[i] * e1.v[j];
+  const e2 = topVec(G);
+  const s1 = Math.sqrt(Math.max(e1.lambda, 0)), s2 = Math.sqrt(Math.max(e2.lambda, 0));
+  let xs = e1.v.map((v, i) => v * s1), ys = e2.v.map((v, i) => v * s2);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const mapX = x => PAD + (x - minX) / (maxX - minX || 1) * (W - PAD * 2);
+  const mapY = y => PAD + (y - minY) / (maxY - minY || 1) * (H - PAD * 2);
+  xs = xs.map(mapX); ys = ys.map(mapY);
+
+  const domains = [
+    { key: 'AI & machine learning', label: 'AI / ML', color: '#e07a5f' },
+    { key: 'Hydrology & extremes', label: 'HYDROLOGY', color: '#4fa3b8' },
+    { key: 'Cryosphere', label: 'CRYOSPHERE', color: '#83d9e6' },
+    { key: 'Ocean & sea level', label: 'OCEAN', color: '#3e7fa8' },
+    { key: 'Future missions', label: 'FUTURE', color: '#e6bb63' },
+    { key: 'Solid Earth', label: 'SOLID EARTH', color: '#c9973f' },
+    { key: 'Reference frames', label: 'REFERENCE', color: '#9b8cff' },
+    { key: 'Data products', label: 'DATA', color: '#8e98a6' },
+    { key: 'Operational services', label: 'OPS', color: '#b9a16b' }
+  ];
+  const domainOf = (it) => (domains.find(d => (it.tags || []).includes(d.key)) || domains[7]).key;
+  const colorOf = (it) => (domains.find(d => d.key === domainOf(it)) || domains[7]).color;
+
+  const edges = new Set();
+  for (let i = 0; i < N; i++) {
+    const ranked = [];
+    for (let j = 0; j < N; j++) if (i !== j && sim[i][j] > .16) ranked.push([j, sim[i][j]]);
+    ranked.sort((a, b) => b[1] - a[1]);
+    ranked.slice(0, 3).forEach(([j, s]) => edges.add(i < j ? i + '-' + j + '-' + s.toFixed(2) : j + '-' + i + '-' + s.toFixed(2)));
+  }
+  const ns = 'http://www.w3.org/2000/svg';
+  const add = (tag, attrs) => { const e = document.createElementNS(ns, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
+  svg.innerHTML = '';
+  add('rect', { x: 0, y: 0, width: W, height: H, fill: '#080c13' });
+  add('g', { opacity: .55 }).innerHTML = '';
+  const grid = add('g', { opacity: .45 });
+  for (let i = 1; i < 6; i++) {
+    const line = document.createElementNS(ns, 'line');
+    line.setAttribute('x1', 0); line.setAttribute('x2', W); line.setAttribute('y1', H / 6 * i); line.setAttribute('y2', H / 6 * i);
+    line.setAttribute('stroke', 'rgba(241,238,231,.06)'); grid.appendChild(line);
+  }
+  const groups = {};
+  ITEMS.forEach((it, i) => { const d = domainOf(it); (groups[d] ||= []).push(i); });
+  const hullOf = (points) => {
+    const p = points.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const lower = [];
+    for (const q of p) { while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], q) <= 0) lower.pop(); lower.push(q); }
+    const upper = [];
+    for (let i = p.length - 1; i >= 0; i--) { const q = p[i]; while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], q) <= 0) upper.pop(); upper.push(q); }
+    lower.pop(); upper.pop();
+    return lower.concat(upper);
+  };
+  const defs = add('defs', {});
+  defs.innerHTML = '<filter id="terrainBlur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="24"/></filter>';
+  const fieldGroup = add('g', {});
+  Object.entries(groups).forEach(([key, arr]) => {
+    if (arr.length < 3) return;
+    const d = domains.find(x => x.key === key) || domains[7];
+    const cx = arr.reduce((s, i) => s + xs[i], 0) / arr.length;
+    const cy = arr.reduce((s, i) => s + ys[i], 0) / arr.length;
+    const radius = Math.max(...arr.map(i => Math.hypot(xs[i] - cx, ys[i] - cy))) + 16;
+    const halo = document.createElementNS(ns, 'circle');
+    halo.setAttribute('cx', cx); halo.setAttribute('cy', cy); halo.setAttribute('r', radius);
+    halo.setAttribute('fill', d.color); halo.setAttribute('fill-opacity', '.065');
+    halo.setAttribute('filter', 'url(#terrainBlur)'); fieldGroup.appendChild(halo);
+    const pts = hullOf(arr.map(i => [xs[i], ys[i]]));
+    if (pts.length >= 3) {
+      const path = document.createElementNS(ns, 'path');
+      const dd = pts.map(([x, y], i) => {
+        const dx = x - cx, dy = y - cy, len = Math.hypot(dx, dy) || 1;
+        return (i ? 'L' : 'M') + (x + dx / len * 12).toFixed(1) + ',' + (y + dy / len * 12).toFixed(1);
+      }).join(' ') + 'Z';
+      path.setAttribute('d', dd); path.setAttribute('fill', d.color); path.setAttribute('fill-opacity', '.025');
+      path.setAttribute('stroke', d.color); path.setAttribute('stroke-opacity', '.32'); path.setAttribute('stroke-width', '1');
+      path.setAttribute('stroke-dasharray', '2 6'); fieldGroup.appendChild(path);
+    }
+  });
+  const edgeGroup = add('g', { opacity: .8 });
+  edges.forEach(key => {
+    const [a, b, s] = key.split('-');
+    const line = document.createElementNS(ns, 'line');
+    line.setAttribute('x1', xs[+a]); line.setAttribute('y1', ys[+a]); line.setAttribute('x2', xs[+b]); line.setAttribute('y2', ys[+b]);
+    line.setAttribute('stroke', 'rgba(131,217,230,' + Math.min(.34, (+s - .16) * 1.6).toFixed(2) + ')');
+    line.setAttribute('stroke-width', .7); edgeGroup.appendChild(line);
+  });
+  const nodeGroup = add('g', {});
+  ITEMS.forEach((it, i) => {
+    const g = document.createElementNS(ns, 'g');
+    g.setAttribute('class', 'domain-node');
+    g.setAttribute('data-n', it.n);
+    g.setAttribute('transform', 'translate(' + xs[i].toFixed(1) + ',' + ys[i].toFixed(1) + ')');
+    const c = document.createElementNS(ns, 'circle');
+    c.setAttribute('r', it.tags && it.tags.includes('Data products') ? 5.2 : 4.2);
+    c.setAttribute('fill', colorOf(it)); c.setAttribute('fill-opacity', '.82');
+    c.setAttribute('stroke', (it.tags || []).includes('Future missions') ? '#e6bb63' : '#080c13');
+    c.setAttribute('stroke-width', (it.tags || []).includes('Future missions') ? '1.7' : '1.2');
+    const title = document.createElementNS(ns, 'title');
+    title.textContent = it.title + ' · ' + it.session + ' · ' + (it.tags || []).join(' / ');
+    g.appendChild(c); g.appendChild(title); nodeGroup.appendChild(g);
+  });
+  const labelGroup = add('g', {});
+  Object.entries(groups).forEach(([key, arr]) => {
+    if (arr.length < 3) return;
+    const d = domains.find(x => x.key === key) || domains[7];
+    const cx = arr.reduce((s, i) => s + xs[i], 0) / arr.length;
+    const cy = arr.reduce((s, i) => s + ys[i], 0) / arr.length;
+    const off = { 'Future missions': [-104, -24], 'Data products': [62, 10], 'Ocean & sea level': [-42, 30], 'Reference frames': [40, -18] }[key] || [0, -16];
+    const t = document.createElementNS(ns, 'text');
+    t.setAttribute('x', (cx + off[0]).toFixed(1)); t.setAttribute('y', (cy + off[1]).toFixed(1));
+    t.setAttribute('text-anchor', 'middle'); t.setAttribute('class', 'domain-label');
+    t.setAttribute('fill', d.color);
+    t.textContent = d.label + ' · ' + arr.length;
+    labelGroup.appendChild(t);
+  });
+  svg.querySelectorAll('.domain-node').forEach(g => g.addEventListener('click', () => openPaper(+g.dataset.n)));
+
+  const legend = $('#domainLegend');
+  if (legend) {
+    const counts = {};
+    ITEMS.forEach(it => { const d = domainOf(it); counts[d] = (counts[d] || 0) + 1; });
+    legend.innerHTML = '<span class="legend-lead">DOMINANT THEME</span>' + domains.filter(d => counts[d.key]).map(d => '<span><i style="background:' + d.color + '"></i>' + d.label + ' <b>' + counts[d.key] + '</b></span>').join('') +
+      '<span class="future-ring"><i></i>FUTURE MISSION RING <b>' + ITEMS.filter(it => (it.tags || []).includes('Future missions')).length + '</b></span>';
+  }
+}
+
+function renderAlluvial(){
+  const svg = $('#alluvMap');
+  if (!svg) return;
+  const W = 1200, H = 620, TOP = 58, BOT = 34, GAP = 7, NW = 18;
+  const methodDefs = [
+    { key: 'ML / statistics', label: 'ML / STATS', color: '#e07a5f' },
+    { key: 'Mission / sensor', label: 'MISSION / SENSOR', color: '#e6bb63' },
+    { key: 'Gravity inversion / mascon', label: 'INVERSION / MASCON', color: '#4fa3b8' },
+    { key: 'Reference / orbit', label: 'REFERENCE / ORBIT', color: '#9b8cff' },
+    { key: 'Data / ops / other', label: 'DATA / OPS / OTHER', color: '#8e98a6' }
+  ];
+  const dataDefs = [
+    { key: 'Water / land', label: 'WATER / LAND', color: '#4fa3b8' },
+    { key: 'Ice', label: 'ICE', color: '#83d9e6' },
+    { key: 'Ocean', label: 'OCEAN', color: '#3e7fa8' },
+    { key: 'Solid Earth', label: 'SOLID EARTH', color: '#c9973f' },
+    { key: 'Reference / multi', label: 'REFERENCE / MULTI', color: '#9b8cff' },
+    { key: 'Mission / other', label: 'MISSION / OTHER', color: '#e6bb63' },
+    { key: 'Data / other', label: 'DATA / OTHER', color: '#8e98a6' }
+  ];
+  const methodOf = (it) => {
+    const t = (it.title + ' ' + it.text + ' ' + (it.tags || []).join(' ')).toLowerCase();
+    if ((it.tags || []).includes('AI & machine learning')) return 'ML / statistics';
+    if (/slr|vlbi|gnss|reference frame|\btrf\b/.test(t)) return 'Reference / orbit';
+    if ((it.tags || []).includes('Future missions') && /grace-c|nggm|magic|laser|accelerometer|clock|orbit|satellite|instrument/.test(t)) return 'Mission / sensor';
+    if (/mascon|spherical harmonic|inversion|least squares|tikhonov|regularization|kalman|assimilation/.test(t)) return 'Gravity inversion / mascon';
+    return 'Data / ops / other';
+  };
+  const dataOf = (it) => {
+    const t = it.tags || [];
+    if (t.includes('Hydrology & extremes')) return 'Water / land';
+    if (t.includes('Cryosphere')) return 'Ice';
+    if (t.includes('Ocean & sea level')) return 'Ocean';
+    if (t.includes('Solid Earth')) return 'Solid Earth';
+    if (t.includes('Reference frames')) return 'Reference / multi';
+    if (t.includes('Future missions')) return 'Mission / other';
+    return 'Data / other';
+  };
+  const sessions = [...SESSIONS].map(s => ({ key: s.code, label: s.code, name: s.name, count: 0, color: '#1d2733' })).sort((a, b) => a.key.localeCompare(b.key));
+  const methods = methodDefs.map(d => ({ ...d, count: 0 }));
+  const datas = dataDefs.map(d => ({ ...d, count: 0 }));
+  const byKey = (arr, k) => arr.find(x => x.key === k);
+  const sm = new Map(), md = new Map();
+  ITEMS.forEach(it => {
+    const s = byKey(sessions, it.session);
+    const m = byKey(methods, methodOf(it));
+    const d = byKey(datas, dataOf(it));
+    if (!s || !m || !d) return;
+    s.count++; m.count++; d.count++;
+    const a = s.key + '\u0001' + m.key, b = m.key + '\u0001' + d.key;
+    sm.set(a, (sm.get(a) || 0) + 1);
+    md.set(b, (md.get(b) || 0) + 1);
+  });
+  const maxNodes = Math.max(sessions.length, methods.length, datas.length);
+  const scale = (H - TOP - BOT - GAP * (maxNodes - 1)) / ITEMS.length;
+  const layout = (arr) => {
+    const totalH = arr.reduce((s, n) => s + n.count, 0) * scale + GAP * (arr.length - 1);
+    let y = TOP + (H - TOP - BOT - totalH) / 2;
+    arr.forEach(n => { n.h = n.count * scale; n.y = y; y += n.h + GAP; });
+  };
+  layout(sessions); layout(methods); layout(datas);
+  const xs = { s: 76, m: 548, d: 1032 };
+  const ns = 'http://www.w3.org/2000/svg';
+  const add = (tag, attrs = {}) => { const e = document.createElementNS(ns, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); svg.appendChild(e); return e; };
+  svg.innerHTML = '';
+  add('rect', { x: 0, y: 0, width: W, height: H, fill: '#080c13' });
+  ['SESSION', 'METHOD', 'DATA DOMAIN'].forEach((t, i) => {
+    const x = [xs.s, xs.m, xs.d][i];
+    const e = add('text', { x: x + NW / 2, y: 28, 'text-anchor': 'middle', class: 'alluv-head' });
+    e.textContent = t;
+  });
+  const linkGroup = add('g', {});
+  const nodeGroup = add('g', {});
+  const flows = [];
+  sessions.forEach(s => {
+    const out = [...sm.entries()].filter(([k]) => k.startsWith(s.key + '\u0001')).map(([k, n]) => ({ m: k.split('\u0001')[1], n }));
+    out.sort((a, b) => byKey(methods, a.m).y - byKey(methods, b.m).y);
+    let off = 0;
+    out.forEach(f => { const m = byKey(methods, f.m); flows.push({ kind: 'sm', s, m, n: f.n, sOff: off, mOff: 0 }); off += f.n * scale; });
+  });
+  methods.forEach(m => {
+    const inc = flows.filter(f => f.m === m && f.kind === 'sm').sort((a, b) => a.s.y - b.s.y);
+    let off = 0; inc.forEach(f => { f.mOff = off; off += f.n * scale; });
+  });
+  const flows2 = [];
+  methods.forEach(m => {
+    const out = [...md.entries()].filter(([k]) => k.startsWith(m.key + '\u0001')).map(([k, n]) => ({ d: k.split('\u0001')[1], n }));
+    out.sort((a, b) => byKey(datas, a.d).y - byKey(datas, b.d).y);
+    let off = 0;
+    out.forEach(f => { const d = byKey(datas, f.d); flows2.push({ kind: 'md', m, d, n: f.n, mOff: off, dOff: 0 }); off += f.n * scale; });
+  });
+  datas.forEach(d => {
+    const inc = flows2.filter(f => f.d === d).sort((a, b) => a.m.y - b.m.y);
+    let off = 0; inc.forEach(f => { f.dOff = off; off += f.n * scale; });
+  });
+  const path = (x0, y0, x1, y1, h) => {
+    const c = (x1 - x0) * .5;
+    return 'M' + x0 + ',' + y0 + 'C' + (x0 + c) + ',' + y0 + ' ' + (x1 - c) + ',' + y1 + ' ' + x1 + ',' + y1 +
+      'L' + x1 + ',' + (y1 + h) + 'C' + (x1 - c) + ',' + (y1 + h) + ' ' + (x0 + c) + ',' + (y0 + h) + ' ' + x0 + ',' + (y0 + h) + 'Z';
+  };
+  flows.forEach(f => {
+    const p = document.createElementNS(ns, 'path');
+    p.setAttribute('d', path(xs.s + NW, f.s.y + f.sOff, xs.m, f.m.y + f.mOff, f.n * scale));
+    p.setAttribute('fill', f.m.color); p.setAttribute('fill-opacity', '.16');
+    p.setAttribute('class', 'alluv-link');
+    const title = document.createElementNS(ns, 'title');
+    title.textContent = f.s.name + ' → ' + f.m.key + ' · ' + f.n;
+    p.appendChild(title); linkGroup.appendChild(p);
+  });
+  flows2.forEach(f => {
+    const p = document.createElementNS(ns, 'path');
+    p.setAttribute('d', path(xs.m + NW, f.m.y + f.mOff, xs.d, f.d.y + f.dOff, f.n * scale));
+    p.setAttribute('fill', f.m.color); p.setAttribute('fill-opacity', '.12');
+    p.setAttribute('class', 'alluv-link');
+    const title = document.createElementNS(ns, 'title');
+    title.textContent = f.m.key + ' → ' + f.d.key + ' · ' + f.n;
+    p.appendChild(title); linkGroup.appendChild(p);
+  });
+  const node = (x, n, align, color, label) => {
+    const r = document.createElementNS(ns, 'rect');
+    r.setAttribute('x', x); r.setAttribute('y', n.y); r.setAttribute('width', NW); r.setAttribute('height', Math.max(2, n.h));
+    r.setAttribute('fill', color); r.setAttribute('rx', 1); nodeGroup.appendChild(r);
+    const t = document.createElementNS(ns, 'text');
+    const tx = align === 'left' ? x - 8 : align === 'above' ? x + NW / 2 : x + NW + 8;
+    const ty = align === 'above' ? n.y - 12 : n.y + Math.min(n.h, 18) / 2 + 3;
+    t.setAttribute('x', tx); t.setAttribute('y', ty);
+    t.setAttribute('text-anchor', align === 'left' ? 'end' : align === 'above' ? 'middle' : 'start');
+    t.setAttribute('class', 'alluv-label');
+    t.textContent = label + ' ' + n.count;
+    nodeGroup.appendChild(t);
+  };
+  sessions.forEach(n => node(xs.s, n, 'left', '#25303d', n.label));
+  methods.forEach(n => node(xs.m, n, 'above', n.color, n.label));
+  datas.forEach(n => node(xs.d, n, 'right', '#25303d', n.label));
+  const legend = $('#alluvLegend');
+  if (legend) legend.innerHTML = methodDefs.map(d => '<span><i style="background:' + d.color + '"></i>' + d.label + '</span>').join('');
+}
+
 function openPaper(n){
   const p = ITEMS.find(i => i.n === n);
   if (!p) return;
@@ -960,6 +1298,8 @@ dialog.addEventListener('wheel', e => e.stopPropagation(), { passive: true });
 dialog.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
 
 renderAnatomy();
+renderDomainMap();
+renderAlluvial();
 
 if (grid) {
   buildFilters();
