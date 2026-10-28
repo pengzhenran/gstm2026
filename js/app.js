@@ -20,10 +20,12 @@ const rootEl = document.documentElement;
 rootEl.classList.add('is-loading');
 document.body.classList.add('is-loading');
 
-const boot = { fonts: false, hero: false, started: performance.now(), done: false };
+const boot = { fonts: false, hero: false, started: performance.now(), done: false, minTimer: null };
+let loadPct = 0;
 function setLoad(p){
-  if (loaderBar) loaderBar.style.width = p + '%';
-  if (loaderPct) loaderPct.textContent = String(Math.round(p)).padStart(2, '0');
+  loadPct = Math.max(loadPct, p);
+  if (loaderBar) loaderBar.style.width = loadPct + '%';
+  if (loaderPct) loaderPct.textContent = String(Math.round(loadPct)).padStart(2, '0');
 }
 function hideLoader(){
   if (boot.done) return;
@@ -41,7 +43,13 @@ function hideLoader(){
 function maybeDone(){
   if (boot.done) return;
   if (!boot.fonts || !boot.hero) return;
-  if (performance.now() - boot.started < 1400) return;
+  const wait = 1400 - (performance.now() - boot.started);
+  if (wait > 0) {
+    if (!boot.minTimer) {
+      boot.minTimer = setTimeout(() => { boot.minTimer = null; maybeDone(); }, wait + 40);
+    }
+    return;
+  }
   setLoad(100);
   setTimeout(hideLoader, 180);
 }
@@ -163,7 +171,6 @@ async function initHero(){
   try {
     renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
   } catch(e) { canvas.style.display = 'none'; window.__markHeroReady?.(); return; }
-
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
@@ -370,9 +377,9 @@ async function initHero(){
     const fade = clamp(1 - sy / (innerHeight * .9), 0, 1);
     canvas.style.opacity = fade.toFixed(3);
     renderer.render(scene, camera);
-    if (!heroFirstFrame) { heroFirstFrame = true; window.__markHeroReady?.(); }
   }
-  let heroFirstFrame = false;
+  renderer.render(scene, camera);
+  window.__markHeroReady?.();
   frame();
 }
 initHero();
