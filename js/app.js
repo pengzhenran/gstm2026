@@ -3,6 +3,8 @@
    ============================================================ */
 import * as THREE from '../vendor/three.module.js';
 
+window.__appBooted = true;
+
 const DATA = window.GSTM;
 const $  = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -21,7 +23,7 @@ rootEl.classList.add('is-loading');
 document.body.classList.add('is-loading');
 
 const boot = { fonts: false, hero: false, started: performance.now(), done: false, minTimer: null };
-let loadPct = 0;
+let loadPct = parseFloat(loaderBar?.style.width) || 0;
 function setLoad(p){
   loadPct = Math.max(loadPct, p);
   if (loaderBar) loaderBar.style.width = loadPct + '%';

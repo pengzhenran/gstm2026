@@ -38,6 +38,22 @@
   <div class="loader-progress"><i id="loaderBar"></i></div>
   <div class="loader-status"><span id="loaderPct">00</span><span>INITIALIZING GRAVITY FIELD</span></div>
 </div>
+<script>
+  // Keep the loader alive while the module graph is still in flight.
+  (function(){
+    var l = document.getElementById('loader');
+    var pct = document.getElementById('loaderPct');
+    var bar = document.getElementById('loaderBar');
+    if (!l || !pct || !bar) return;
+    var n = 0;
+    var tick = setInterval(function(){
+      if (window.__appBooted || l.classList.contains('done') || !document.body.contains(l)) { clearInterval(tick); return; }
+      n = Math.min(92, n + 2 + Math.random() * 3);
+      pct.textContent = String(Math.round(n)).padStart(2, '0');
+      bar.style.width = n.toFixed(0) + '%';
+    }, 260);
+  })();
+</script>
 
 <div class="grain" aria-hidden="true"></div>
 <div class="type-control" id="typeControl">
