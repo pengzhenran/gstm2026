@@ -842,6 +842,75 @@ function renderPapers(){
   });
 }
 
+function renderAnatomy(){
+  const table = $('#coocTable');
+  if (!table) return;
+  const topics = [
+    ['Data products', 'DATA'],
+    ['Hydrology & extremes', 'WATER'],
+    ['Ocean & sea level', 'OCEAN'],
+    ['Future missions', 'FUTURE'],
+    ['Cryosphere', 'ICE'],
+    ['Reference frames', 'FRAME'],
+    ['Operational services', 'OPS'],
+    ['AI & machine learning', 'AI']
+  ];
+  let html = '<thead><tr><th></th>' + topics.map(t => '<th title="' + t[0] + '">' + t[1] + '</th>').join('') + '</tr></thead><tbody>';
+  topics.forEach((a, i) => {
+    html += '<tr><td class="row" title="' + a[0] + '">' + a[1] + '</td>';
+    topics.forEach((b, j) => {
+      if (i === j) { html += '<td class="diag">—</td>'; return; }
+      const n = ITEMS.filter(it => (it.tags || []).includes(a[0]) && (it.tags || []).includes(b[0])).length;
+      const lv = n === 0 ? '' : n <= 5 ? 'l1' : n <= 10 ? 'l2' : n <= 18 ? 'l3' : 'l4';
+      html += '<td class="' + lv + '" title="' + a[0] + ' × ' + b[0] + ': ' + n + '">' + (n || '·') + '</td>';
+    });
+    html += '</tr>';
+  });
+  table.innerHTML = html + '</tbody>';
+
+  const sessionBars = $('#sessionBars');
+  if (sessionBars) {
+    const sessions = [...SESSIONS].sort((a, b) => b.count - a.count);
+    const max = Math.max(...sessions.map(s => s.count));
+    sessionBars.innerHTML = sessions.map(s => {
+      const oral = s.orals / max * 100;
+      const poster = s.posters / max * 100;
+      const label = s.code + ' · ' + s.name.split(/\s+/).slice(0, 2).join(' ');
+      return '<div class="an-bar-row" title="' + esc(s.name) + '">' +
+        '<div class="an-bar-label"><b>' + s.code + '</b>' + esc(s.name.split(/\s+/).slice(0, 2).join(' ')) + '</div>' +
+        '<div class="an-track"><i class="oral" style="width:' + oral.toFixed(2) + '%"></i><i class="poster" style="width:' + poster.toFixed(2) + '%"></i></div>' +
+        '<div class="an-val">' + s.count + '</div></div>';
+    }).join('');
+  }
+
+  const instBars = $('#institutionBars');
+  if (instBars) {
+    const inst = Object.entries(DATA.institutions).sort((a, b) => b[1] - a[1]).slice(0, 8);
+    const max = inst[0][1];
+    instBars.innerHTML = inst.map(([name, n]) =>
+      '<div class="an-bar-row"><div class="an-bar-label" title="' + esc(name) + '">' + esc(name) + '</div>' +
+      '<div class="an-track"><i class="single" style="width:' + (n / max * 100).toFixed(2) + '%"></i></div>' +
+      '<div class="an-val">' + n + '</div></div>'
+    ).join('');
+  }
+
+  const authorBars = $('#authorBars');
+  if (authorBars) {
+    const bins = [['1–3', 0], ['4–6', 0], ['7–9', 0], ['10–14', 0], ['15+', 0]];
+    ITEMS.forEach(it => {
+      const n = (it.authors.match(/,/g) || []).length + 1;
+      const k = n <= 3 ? 0 : n <= 6 ? 1 : n <= 9 ? 2 : n <= 14 ? 3 : 4;
+      bins[k][1]++;
+    });
+    const max = Math.max(...bins.map(b => b[1]));
+    authorBars.innerHTML = bins.map(([label, n]) =>
+      '<div class="an-bar-row"><div class="an-bar-label">' + label + ' 位</div>' +
+      '<div class="an-track"><i class="single" style="width:' + (n / max * 100).toFixed(2) + '%"></i></div>' +
+      '<div class="an-val">' + n + '</div></div>'
+    ).join('');
+  }
+}
+
 function openPaper(n){
   const p = ITEMS.find(i => i.n === n);
   if (!p) return;
@@ -889,6 +958,8 @@ dialog.addEventListener('close', () => {
 });
 dialog.addEventListener('wheel', e => e.stopPropagation(), { passive: true });
 dialog.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
+
+renderAnatomy();
 
 if (grid) {
   buildFilters();

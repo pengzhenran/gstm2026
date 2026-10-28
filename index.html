@@ -529,6 +529,83 @@
           </div>
         </div>
       </div>
+
+      <!-- anatomy -->
+      <div class="anatomy" id="anatomy">
+        <div class="anatomy-head" data-reveal>
+          <div>
+            <span class="kicker">03½ / ANATOMY</span>
+            <h2 class="display">Cutting the<br><em>91.</em></h2>
+          </div>
+          <div>
+            <p class="anatomy-lede">
+              把 91 篇摘要按主题、session、机构和作者数重新切一遍，会看到几个和会议叙事不完全一样的结构。
+              下面四张图不是新的观测结果，是对摘要文本的二次统计。
+            </p>
+            <p class="micro">Multi-label. 主题计数不互斥；机构计数按论文涉及的单位计，一篇可计多个机构。</p>
+          </div>
+        </div>
+
+        <div class="anatomy-grid">
+          <article class="an-card an-wide" data-reveal>
+            <div class="an-head"><span class="an-no">FIG. A</span><h3>数据产品是最大公约数</h3><span class="an-note">co-occurrence · 91 papers</span></div>
+            <p class="an-copy">
+              68 篇提到数据产品，35 篇同时谈水文，26 篇同时谈海洋，18 篇同时谈冰冻圈。
+              数据产品不是一个独立赛道，它更像一条穿过所有应用方向的线：做水、做冰、做海洋的人，都在处理版本、误差和融合。
+            </p>
+            <div class="cooc-wrap"><table class="cooc" id="coocTable" aria-label="主题共现矩阵"></table></div>
+            <p class="an-cap">读法：行与列交叉 = 同时提到两个主题的论文数。对角线不填。数据来源：91 篇摘要的标签。</p>
+          </article>
+
+          <article class="an-card" data-reveal>
+            <div class="an-head"><span class="an-no">FIG. B</span><h3>20 篇的 A.2，19 篇的 B.4</h3><span class="an-note">session size</span></div>
+            <p class="an-copy">
+              A.2 是最大的 session，20 篇；B.4 水文 19 篇；A.3 下一代任务 18 篇。poster 主要集中在 A.2、A.3 和 B.4，
+              下一代任务并不只是主会场的口头报告。
+            </p>
+            <div class="an-bars" id="sessionBars"></div>
+            <div class="an-legend"><span><i class="oral"></i>oral</span><span><i class="poster"></i>poster</span></div>
+            <p class="an-cap">B.4 的 19 篇里 18 篇谈极端事件；A.3 的 18 篇里有 5 篇是 poster。</p>
+          </article>
+
+          <article class="an-card" data-reveal>
+            <div class="an-head"><span class="an-no">FIG. C</span><h3>谁在写这些摘要</h3><span class="an-note">top institutions</span></div>
+            <p class="an-copy">
+              GFZ 19 篇、NASA JPL 17 篇、Toulouse / CNES 11 篇排在前面。前三个机构加起来是 47 次机构出现，
+              但 91 篇论文分布在 21 个国家，集中度和多样性同时存在。
+            </p>
+            <div class="an-bars inst" id="institutionBars"></div>
+            <p class="an-cap">一篇论文可涉及多个机构，因此合计大于 91。国家前四：US 44、DE 34、FR 12、NL 7。</p>
+          </article>
+
+          <article class="an-card" data-reveal>
+            <div class="an-head"><span class="an-no">FIG. D</span><h3>合作规模：平均 5.5 位作者</h3><span class="an-note">authors per paper</span></div>
+            <p class="an-copy">
+              30 篇只有 1—3 位作者，33 篇 4—6 位，28 篇 7 位及以上；最长的一篇有 29 位作者。
+              大地测量正在变成一种团队工作，尤其是任务状态、再处理和多机构联合反演。
+            </p>
+            <div class="an-bars authors" id="authorBars"></div>
+            <p class="an-cap">按作者字符串中的逗号计数，仅用于分布比较。</p>
+          </article>
+
+          <article class="an-card" data-reveal>
+            <div class="an-head"><span class="an-no">NOTE</span><h3>这些数字不能说明什么</h3><span class="an-note">limits</span></div>
+            <p class="an-copy">
+              四张图都是对摘要文本的二次统计，不是对科学质量的评分。看的时候要记住三个口径。
+            </p>
+            <ul class="an-list">
+              <li><b>主题是多标签。</b>68 篇提到数据产品，不等于 68 篇都在做产品；它们可能只是用了某个版本。</li>
+              <li><b>机构会重复计数。</b>一篇论文可涉及多个单位；“UK universities”这类聚合项会低估单个机构。</li>
+              <li><b>作者数是近似值。</b>按逗号切分，未处理集体作者；29 位作者的那篇是大型任务署名。</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="anatomy-close" data-reveal>
+          <span>READING</span>
+          <p>91 篇摘要的重心，不是 91 个彼此独立的主题。水文、海洋和冰冻圈三条应用线，共同依赖数据产品与下一代任务；而下一代任务本身，也越来越多地被放进水与气候的应用场景里讨论。</p>
+        </div>
+      </div>
     </div>
   </section>
 
