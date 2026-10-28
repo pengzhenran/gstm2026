@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>GSTM 2026 — Gravity, in Motion | GRACE/GRACE-FO Science Team Meeting 深度观察</title>
+<meta name="description" content="GSTM 2026（GRACE/GRACE-FO Science Team Meeting，Potsdam，2026-10-13—15）调研：91 篇在册报告、10 个 session、21 个国家；下一代任务、机器学习、日常使用、水文与数据产品。" />
+<meta name="theme-color" content="#06080d" />
+<link rel="icon" href="assets/favicon.png" />
+<link rel="preload" href="fonts/f2.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="css/readability.css" />
+</head>
+<body>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-orbit"><i></i><i></i><span></span></div>
+  <div class="loader-brand">GSTM<span>2026</span></div>
+  <div class="loader-meta">GRACE / GRACE-FO SCIENCE TEAM MEETING</div>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="type-control" id="typeControl">
+  <button class="type-handle" id="typeHandle" aria-expanded="false" aria-controls="typePanel" aria-label="调整字号">Aa</button>
+  <div class="type-panel" id="typePanel" role="group" aria-label="调整字号">
+    <button id="fontMinus" aria-label="减小字号">A−</button>
+    <span id="fontPct" aria-live="polite">100%</span>
+    <button id="fontPlus" aria-label="增大字号">A+</button>
+  </div>
+</div>
+<div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#hero" data-scroll>
+    <span class="brand-mark">G</span>
+    <span class="brand-text">GSTM<em>2026</em></span>
+  </a>
+  <nav class="nav" aria-label="章节导航">
+    <a href="#prologue" data-scroll><i>01</i>序</a>
+    <a href="#programme" data-scroll><i>02</i>议程</a>
+    <a href="#signals" data-scroll><i>03</i>观察</a>
+    <a href="#missions" data-scroll><i>04</i>时间线</a>
+    <a href="#world" data-scroll><i>05</i>世界</a>
+    <a href="#explore" data-scroll><i>06</i>检索</a>
+    <a href="#archive" data-scroll><i>07</i>档案</a>
+  </nav>
+  <div class="topbar-meta">
+    <span class="dot"></span> POTSDAM · 13—15 OCT 2026
+  </div>
+  <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false"><i></i><i></i></button>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu" aria-label="移动端导航">
+  <a href="#prologue" data-scroll><i>01</i>序 · Prologue</a>
+  <a href="#programme" data-scroll><i>02</i>议程 · Programme</a>
+  <a href="#signals" data-scroll><i>03</i>观察 · Observations</a>
+  <a href="#missions" data-scroll><i>04</i>时间线 · Missions</a>
+  <a href="#world" data-scroll><i>05</i>世界 · World</a>
+  <a href="#explore" data-scroll><i>06</i>检索 · Explorer</a>
+  <a href="#archive" data-scroll><i>07</i>档案 · Archive</a>
+</nav>
+
+<main>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section class="hero" id="hero">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+
+    <div class="hero-inner shell">
+      <div class="hero-top" data-reveal>
+        <span>GRACE / GRACE-FO SCIENCE TEAM MEETING</span>
+        <span class="hero-top-right">HYBRID · 172 PARTICIPANTS</span>
+      </div>
+
+      <div class="hero-title-wrap">
+        <h1 class="hero-title" aria-label="GSTM 2026">
+          <span class="hero-word" data-reveal>GSTM</span>
+          <span class="hero-year" data-reveal><i>20</i>26</span>
+        </h1>
+        <p class="hero-sub" data-reveal>
+          <span class="serif">Gravity, in motion.</span>
+          <span class="cn">重力，继续丈量地球。</span>
+        </p>
+        <div class="hero-coord" data-reveal>
+          <i></i>
+          <div><b>52.3793° N · 13.0645° E</b><span>TELEGRAFENBERG / POTSDAM</span></div>
+        </div>
+      </div>
+
+      <div class="hero-bottom">
+        <p class="hero-lede" data-reveal>
+          GRACE 与 GRACE-FO 已经连续记录了 22 年的地球质量变化。今年会上讨论最多的是
+          下一代卫星的编队与传感器、数据产品的更新速度，以及这些产品如何进入水资源和气候服务。
+        </p>
+        <div class="hero-stats" data-reveal>
+          <div class="hs"><b data-count="172">172</b><span>参会者<br>participants</span></div>
+          <div class="hs"><b data-count="91">91</b><span>在册报告<br>contributions</span></div>
+          <div class="hs"><b data-count="21">21</b><span>国家 / 地区<br>countries</span></div>
+          <div class="hs"><b data-count="3">3</b><span>天 · 10 场<br>days / sessions</span></div>
+        </div>
+      </div>
+
+      <div class="hero-foot" data-reveal>
+        <div class="hero-loc">
+          <span class="live-dot"></span>
+          GFZ Helmholtz Centre for Geosciences · Potsdam, Germany
+        </div>
+        <a class="scroll-cue" href="#prologue" data-scroll><span>SCROLL TO ORBIT</span><i></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 01 PROLOGUE ═══════════════════ -->
+  <section class="section prologue" id="prologue">
+    <div class="shell">
+      <div class="sec-head" data-reveal>
+        <span class="kicker"><i>01</i> PROLOGUE</span>
+        <span class="sec-meta">POTSDAM · OCT 2026</span>
+      </div>
+
+      <div class="prologue-grid">
+        <aside class="prologue-aside" data-reveal>
+          <h2 class="display">A meeting<br>about <em>mass.</em></h2>
+          <p class="cn-title">一场关于「质量」的会议</p>
+          <div class="aside-rule"></div>
+          <p class="aside-note">
+            会议讨论的对象是地球系统的质量迁移：水、冰、大气和固体地球。
+            测量精度到毫米级以后，议题更多落在数据怎么用、多久更新一次、
+            误差怎么向用户说明。
+          </p>
+        </aside>
+
+        <div class="prologue-body">
+          <p class="lead" data-reveal>
+            2026 年 10 月 13—15 日，会议在波茨坦 GFZ 举行，172 人参加，
+            91 篇报告进入日程，分 10 个 session。GRACE-FO 仍在轨，GRACE-C 进入总装测试，
+            NGGM 与 MAGIC 已经给出具体的轨道、编队和产品指标。
+          </p>
+          <div class="two-col">
+            <p data-reveal>
+              <b>A.3（GRACE-C、NGGM 与未来任务）</b>是除水文外最大的 session：
+              18 篇报告、3 小时 09 分。内容从 GRACE-C 的总装状态、NGGM 的倾角轨道，
+              到 MAGIC 的多对卫星编队，以及冷原子、光钟、光机惯性传感器和小卫星激光测距。
+            </p>
+            <p data-reveal>
+              <b>B.6（卫星重力的实际使用）</b>只有 2 篇，但两篇都涉及具体系统：
+              Copernicus C3S 的 ECV 产品，和 CNES/Magellium 的 SAGSA L2—L4 自动生产链。
+              B.4 水文是最大的应用 session，19 篇，关键词是干旱、洪水和地下水。
+            </p>
+          </div>
+          <p data-reveal>
+            本报告使用会议官网和 Copernicus 会议系统的公开材料：10 个 session 页面、
+            95 篇摘要（4 篇撤稿，91 篇进入日程）、议程、参会统计和视觉素材。
+            主题计数先对摘要全文做关键词匹配，再由人工复核；同一篇报告可能归入多个主题。
+            引用保留 GSTM2026 编号，可以逐条回到原文。
+          </p>
+
+          <dl class="fact-grid" data-reveal>
+            <div><dt>Venue</dt><dd>GFZ Helmholtz Centre for Geosciences<br><span>Telegrafenberg, Potsdam</span></dd></div>
+            <div><dt>Dates</dt><dd>13—15 October 2026<br><span>3 days · single track</span></dd></div>
+            <div><dt>Format</dt><dd>Hybrid · 172 participants<br><span>91 on-site / 81 online</span></dd></div>
+            <div><dt>Programme</dt><dd>10 sessions · 91 contributions<br><span>95 submitted · 4 withdrawn</span></dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <blockquote class="pull" data-reveal>
+        <p>“The combined GRACE &amp; GRACE-FO data records now span over 22 years and provide
+        foundational observations of monthly to decadal global mass changes.”</p>
+        <cite>Felix Landerer et al. · GSTM2026-103 · GRACE-FO: mission status, science performance and outlook</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 02 PROGRAMME ═══════════════════ -->
+  <section class="section programme" id="programme">
+    <div class="shell">
+      <div class="sec-head" data-reveal>
+        <span class="kicker"><i>02</i> THE SHAPE OF THE PROGRAMME</span>
+        <span class="sec-meta">10 SESSIONS · 91 CONTRIBUTIONS</span>
+      </div>
+      <div class="section-intro" data-reveal>
+        <h2 class="display">Ten rooms,<br><em>one field.</em></h2>
+        <p>
+          三天单轨，10 个 session。报告最多的是 A.2 方法（20）和 B.4 水文（19）；
+          A.3 未来任务有 18 篇，时长 3 小时 09 分。A.4 平均重力场只有 1 篇，B.1 固体地球 2 篇。
+        </p>
+      </div>
+
+      <div class="programme-grid">
+        <div class="donut-panel" data-reveal>
+          <div class="donut-wrap">
+            <svg id="donut" viewBox="0 0 420 420" role="img" aria-label="各 session 报告数量环形图"></svg>
+            <div class="donut-center">
+              <b id="donutCount">91</b>
+              <span>contributions</span>
+              <em id="donutLabel">ALL SESSIONS</em>
+            </div>
+          </div>
+          <p class="micro">Hover / tap a segment to inspect a session. Arc length = number of contributions.</p>
+        </div>
+
+        <div class="session-list" id="sessionList" data-reveal></div>
+      </div>
+
+      <div class="day-block" data-reveal>
+        <div class="block-head">
+          <h3>The three days</h3>
+          <span>09:00 — 18:00 · Lecture Hall, Building H</span>
+        </div>
+        <div class="day-timeline" id="dayTimeline"></div>
+        <p class="micro">Poster session: Wednesday 16:40—18:00, Foyer Building H. Block height is proportional to scheduled duration.</p>
+      </div>
+
+      <div class="matrix-block" data-reveal>
+        <div class="block-head">
+          <h3>Where the topics sit</h3>
+          <span>Session × theme · paper counts (multi-label)</span>
+        </div>
+        <div class="matrix-wrap">
+          <div class="matrix" id="matrix"></div>
+          <div class="matrix-legend">
+            <span>less</span><i class="m0"></i><i class="m1"></i><i class="m2"></i><i class="m3"></i><i class="m4"></i><span>more</span>
+          </div>
+        </div>
+        <p class="micro">A cell counts papers in a session whose title or abstract touches a theme. Multi-label: rows do not sum to session totals.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 03 SIGNALS ═══════════════════ -->
+  <section class="section signals" id="signals">
+    <div class="shell">
+      <div class="sec-head" data-reveal>
+        <span class="kicker"><i>03</i> FIVE OBSERVATIONS</span>
+        <span class="sec-meta">READING THE 91 ABSTRACTS</span>
+      </div>
+      <div class="section-intro signals-intro" data-reveal>
+        <h2 class="display">What the<br><em>abstracts show.</em></h2>
+        <p>
+          下面五组内容来自摘要里反复出现的主题，顺序按出现频率排，不按 session 顺序。
+          每组的数字是提到该主题的论文数，多标签，不互斥。
+        </p>
+      </div>
+
+      <div class="signal-layout">
+
+        <article class="signal" id="signal-1">
+          <div class="signal-side">
+            <span class="sig-index">01</span>
+            <div class="sig-stat"><b>22</b><span>篇摘要提到<br>GRACE-C / NGGM / MAGIC</span></div>
+            <div class="orbit-fig" aria-hidden="true">
+              <svg viewBox="0 0 300 300">
+                <circle cx="150" cy="150" r="46" class="earth"/>
+                <ellipse cx="150" cy="150" rx="118" ry="48" class="orb o1"/>
+                <ellipse cx="150" cy="150" rx="118" ry="48" class="orb o2" transform="rotate(58 150 150)"/>
+                <ellipse cx="150" cy="150" rx="132" ry="26" class="orb o3" transform="rotate(-26 150 150)"/>
+                <circle cx="268" cy="150" r="3.5" class="sat s1"/>
+                <circle cx="212" cy="226" r="3.5" class="sat s2"/>
+                <circle cx="47" cy="112" r="3.5" class="sat s3"/>
+                <circle cx="150" cy="150" r="3" class="pulse"/>
+              </svg>
+              <span class="fig-label">MAGIC = polar GRACE-C + inclined NGGM</span>
+            </div>
+          </div>
+          <div class="signal-body">
+            <span class="sig-kicker">OBSERVATION 01 / CONSTELLATION</span>
+            <h3>下一代任务：<br>从一对到一组</h3>
+            <p class="sig-en">GRACE-C, NGGM and MAGIC.</p>
+            <p>
+              GRACE-C 已进入总装、集成与测试，计划 <b>2028 年 12 月</b>发射。
+              激光测距干涉仪、加速度计、GNSS 接收机和星相机正在集成。ESA 的 NGGM 采用
+              约 <b>70° 倾角</b>，增加非极区采样；MAGIC 把极轨 GRACE-C 与倾斜 NGGM 组合，
+              目标是把产品周期缩短到 <b>10 天或 5 天</b>。
+            </p>
+            <p>
+              会上讨论较多的是编队和传感器方案：Pendulum、Helix 等多向编队，
+              <b>10⁻¹⁹—10⁻²⁰</b> 的光钟噪声，加速度计移植，8U / 6 kg / 20 W 的小卫星
+              激光测距载荷，以及 2027 年 2 月发射的 GRATTIS。A.3 的 18 篇报告覆盖了这些选项。
+            </p>
+            <div class="evidence">
+              <span class="ev-label">EVIDENCE</span>
+              <button class="chip" data-paper="88">88 · GRACE-C status</button>
+              <button class="chip" data-paper="18">18 · NGGM / MAGIC</button>
+              <button class="chip" data-paper="56">56 · 10-day TWS</button>
+              <button class="chip" data-paper="49">49 · optical clocks</button>
+              <button class="chip" data-paper="83">83 · GRATTIS</button>
+            </div>
+            <div class="mini-metrics">
+              <div><b>15—20%</b><span>NGGM 在 220 / 165 km 尺度上对 10 天 TWS 的恢复增益（相对 GRACE-C）</span></div>
+              <div><b>3h09</b><span>A.3 的净会议时长，全场最长</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="signal" id="signal-2">
+          <div class="signal-side">
+            <span class="sig-index">02</span>
+            <div class="sig-stat"><b>7</b><span>篇明确使用<br>机器学习 / 深度学习</span></div>
+            <div class="pipeline-fig" aria-hidden="true">
+              <div class="pipe"><i></i><span>L1B</span></div>
+              <div class="pipe"><i></i><span>MODEL</span></div>
+              <div class="pipe"><i></i><span>L2</span></div>
+              <div class="pipe"><i></i><span>SERVICE</span></div>
+              <em>physics-informed · mass-conserving</em>
+            </div>
+          </div>
+          <div class="signal-body">
+            <span class="sig-kicker">OBSERVATION 02 / MACHINE LEARNING</span>
+            <h3>机器学习开始<br>处理重力数据</h3>
+            <p class="sig-en">Four tasks in the processing chain.</p>
+            <p>
+              7 篇报告把机器学习用于具体环节：用 MLP / LSTM / BiLSTM 做<b>加速度计移植</b>，
+              用深度网络分离水、冰和噪声，用 U-Net 把 NGGM / MAGIC 的 3° 模拟场降到 1°，
+              用随机森林做 GRACE 缺测重建和 0.1° 降尺度，用机器学习为 GRACE-C 的
+              <b>3 天 quicklook</b> 做质量筛查。
+            </p>
+            <p>
+              这些工作大多在模型或后处理中加入物理约束，并在重力场层面评估结果。
+              #78 的 dual-stream 架构在月度分支施加全球质量收支投影，日度分支用
+              Student-t 似然处理重尾残差；#66 把去噪和信号分离合成一步，并与 GFZ GravIS
+              产品对比。机器学习在这里主要承担反演、校准、补缺和质检，物理模型仍是主体。
+            </p>
+            <div class="evidence">
+              <span class="ev-label">EVIDENCE</span>
+              <button class="chip" data-paper="12">12 · accelerometer transplant</button>
+              <button class="chip" data-paper="66">66 · deep signal separation</button>
+              <button class="chip" data-paper="78">78 · daily 25 km</button>
+              <button class="chip" data-paper="54">54 · quicklook screening</button>
+              <button class="chip" data-paper="4">4 · NGGM extremes</button>
+            </div>
+            <div class="mini-bars" id="aiBars"></div>
+          </div>
+        </article>
+
+        <article class="signal" id="signal-3">
+          <div class="signal-side">
+            <span class="sig-index">03</span>
+            <div class="sig-stat"><b>15</b><span>篇提到气候服务、<br>早期预警或日常管理</span></div>
+            <div class="ladder-fig" aria-hidden="true">
+              <div class="rung"><b>MONTHLY</b><span>GRACE / GRACE-FO L2</span></div>
+              <div class="rung"><b>10-DAY</b><span>CNES L2 / L3</span></div>
+              <div class="rung"><b>DAILY</b><span>GFZ Kalman</span></div>
+              <div class="rung"><b>3-DAY</b><span>GRACE-C quicklook</span></div>
+            </div>
+          </div>
+          <div class="signal-body">
+            <span class="sig-kicker">OBSERVATION 03 / OPERATIONS</span>
+            <h3>重力数据<br>进入日常使用</h3>
+            <p class="sig-en">From research product to climate service.</p>
+            <p>
+              Copernicus C3S 把 <b>Terrestrial Water Storage and Groundwater</b> 做成
+              Essential Climate Variable 服务，交付 CDR、数据文档包和不确定性说明，
+              发布在 Climate Data Store。难点在于缺少原位基准时的质量刻画：
+              质量守恒、流域闭合、与水文模型和井水位对比，并逐项说明适用场景。
+            </p>
+            <p>
+              CNES / Magellium 的 SAGSA 把 L2—L4 生产链自动化，按月或半年更新，
+              分发到 DATATERRA 数据枢纽。GFZ 的日解和 CNES 的 10 天解把更新周期缩短到
+              事件尺度。进入日常使用之后，用户更关心<b>时延、可追溯性、版本更新和责任边界</b>，
+              精度只是其中一项。
+            </p>
+            <div class="evidence">
+              <span class="ev-label">EVIDENCE</span>
+              <button class="chip" data-paper="97">97 · C3S ECV</button>
+              <button class="chip" data-paper="70">70 · SAGSA L2—L4</button>
+              <button class="chip" data-paper="21">21 · SAGSA L3</button>
+              <button class="chip" data-paper="20">20 · 10-day CNES</button>
+              <button class="chip" data-paper="77">77 · daily Kalman</button>
+            </div>
+            <div class="mini-metrics">
+              <div><b>2 mm</b><span>SAGSA 全球大气质量改正对 2016—2026 海平面收支残差的量级</span></div>
+              <div><b>3 days</b><span>GRACE-C 预期 quicklook 时延</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="signal" id="signal-4">
+          <div class="signal-side">
+            <span class="sig-index">04</span>
+            <div class="sig-stat"><b>19</b><span>篇水文报告<br>占全部报告 21%</span></div>
+            <div class="water-fig" aria-hidden="true">
+              <div class="water-bar"><i style="--h:69%"></i><b>9</b><span>干旱</span></div>
+              <div class="water-bar"><i style="--h:100%"></i><b>13</b><span>洪水/湿</span></div>
+              <div class="water-bar"><i style="--h:92%"></i><b>12</b><span>地下水</span></div>
+              <div class="water-bar"><i style="--h:38%"></i><b>5</b><span>湖泊</span></div>
+            </div>
+          </div>
+          <div class="signal-body">
+            <span class="sig-kicker">OBSERVATION 04 / WATER EXTREMES</span>
+            <h3>水文是最大的<br>应用方向</h3>
+            <p class="sig-en">Hydrology is the largest application area.</p>
+            <p>
+              B.4 是最大的应用 session，也是下一代任务最直接的需求来源。18 篇摘要谈极端事件：
+              干旱 9 篇、洪水 / 湿极端 13 篇、地下水 12 篇。科罗拉多河流域给出了几组具体数字：
+              2020—2022 干旱期间，上游地下水损失 <b>17.5 ± 3.5 km³</b>，高于下游的
+              <b>9.4 ± 6.5 km³</b>；全流域总水储量损失 <b>52.2 km³</b>，其中约 <b>65%</b>
+              来自地下水。Rio Grande—Bravo 的地下水消耗为 <b>2.7 km³/yr</b>，
+              52% 的直接人为用水不可持续，农业占直接消耗的 87%。
+            </p>
+            <p>
+              方法上，产品的时间和空间分辨率都在提高：14,071 个湖泊逐月重建，
+              65% 的 3° mascon 受湖泊水量影响；10 天 GRACE-DSI 能识别 2010—11 拉尼娜和
+              2022 年法国干旱；日尺度 25 km 降尺度产品用 22 年大气河和 104 次热带气旋事件验证；
+              stacked L1B 把 TWS 趋势解析到约 12,500 km²，并在 40 个区域把趋势归因到灌溉、
+              地下水开采、毁林和水库蓄水。
+            </p>
+            <div class="evidence">
+              <span class="ev-label">EVIDENCE</span>
+              <button class="chip" data-paper="58">58 · Colorado groundwater</button>
+              <button class="chip" data-paper="92">92 · 52.2 km³</button>
+              <button class="chip" data-paper="46">46 · 14,071 lakes</button>
+              <button class="chip" data-paper="20">20 · 10-day DSI</button>
+              <button class="chip" data-paper="87">87 · attribution</button>
+              <button class="chip" data-paper="78">78 · daily 25 km</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="signal" id="signal-5">
+          <div class="signal-side">
+            <span class="sig-index">05</span>
+            <div class="sig-stat"><b>18</b><span>篇提到再处理、<br>新版本或新产品</span></div>
+            <div class="stack-fig" aria-hidden="true">
+              <div class="layer l4"><b>L4</b><span>应用 / 指标</span></div>
+              <div class="layer l3"><b>L3</b><span>网格 / 融合</span></div>
+              <div class="layer l2"><b>L2</b><span>重力场</span></div>
+              <div class="layer l1"><b>L1C</b><span>可复现中间量</span></div>
+              <div class="layer l0"><b>L1B</b><span>校准观测</span></div>
+            </div>
+          </div>
+          <div class="signal-body">
+            <span class="sig-kicker">OBSERVATION 05 / PRODUCT MATURITY</span>
+            <h3>产品本身<br>成了研究对象</h3>
+            <p class="sig-en">Product versions and combinations.</p>
+            <p>
+              GFZ 将在 <b>2026 年第四季度</b>发布 RL07，重做随机模型、观测相对 weighting，
+              并把非潮汐背景模型误差协方差纳入解算。COM-TG 把四家分析中心的产品放在统一
+              反演框架里融合，用海岸线 / 接地线分辨率改进处理陆海信号归属。Hawk L1C 公开
+              KBRR 残差、视线重力差、法方程和校准加速度计（2002—2026，即将上架 Zenodo），
+              使 L1B 到 L2 的链条可以复现。
+            </p>
+            <p>
+              当产品差异小于真实信号时，比较产品差异本身成为一项研究内容。
+              再处理、组合、不确定性传播和版本说明，直接影响气候服务是否采用这些产品。
+              18 篇相关报告说明，社区正在为下一代任务的 <b>5 天 / 10 天</b> 产品准备质量基础设施。
+            </p>
+            <div class="evidence">
+              <span class="ev-label">EVIDENCE</span>
+              <button class="chip" data-paper="23">23 · GFZ RL07</button>
+              <button class="chip" data-paper="74">74 · COM-TG</button>
+              <button class="chip" data-paper="68">68 · Hawk L1C</button>
+              <button class="chip" data-paper="25">25 · COST-G</button>
+              <button class="chip" data-paper="73">73 · CNES reprocessing</button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <aside class="cold-signals" data-reveal>
+        <div class="cold-head"><span>COUNTERPOINTS</span><em>另外四点</em></div>
+        <div class="cold-grid">
+          <div><b>01</b><p><strong>平均重力场只有 1 篇。</strong>GOCO2025s 是 A.4 的唯一报告，内容以模型组合和解释为主。</p></div>
+          <div><b>02</b><p><strong>固体地球只有 2 篇。</strong>GIA 和地幔流变仍是趋势改正的前置条件，但今年没有单独的方法报告。</p></div>
+          <div><b>03</b><p><strong>4 篇撤稿。</strong>3 篇在会前、1 篇在会中撤下。</p></div>
+          <div><b>04</b><p><strong>82 位报告人，平均 5.5 位作者。</strong>24 篇摘要跨 2 个以上国家，平均 1.4 个。</p></div>
+        </div>
+      </aside>
+
+      <div class="interlude" data-reveal>
+        <div class="interlude-kicker">INTERLUDE — NOTES FROM THE CRYOSPHERE</div>
+        <div class="interlude-grid">
+          <h3>南极的「增重」，<br>可能来自降雪。</h3>
+          <div>
+            <p>
+              2019—2024 年，南极冰盖的质量损失放缓。两篇报告把原因指向热带暖池：
+              持续增温激发向极传播的罗斯贝波列，在东南极上空形成高压异常，带来更多降水。
+              这轮增重与 2004—2007 年的事件在量级和持续时间上接近，属于表面物质平衡的年际变化。
+            </p>
+            <p>
+              格陵兰在 2012 年后因连续冷夏出现损失放缓，但 2002—2026 年平均损失仍有
+              <b>245 ± 47 Gt/yr</b>；全球冰川 <b>296 ± 30 Gt/yr</b>，加速度 <b>6 ± 2 Gt/yr²</b>。
+              冰盖没有加速，不等于海平面风险下降。年际变化会掩盖十年尺度趋势，
+              这也是重力任务需要继续飞、并且飞得更久的原因。
+            </p>
+          </div>
+          <div class="ice-stats">
+            <div><b>245 ± 47</b><span>Gt/yr · Greenland 2002—2026</span></div>
+            <div><b>296 ± 30</b><span>Gt/yr · glaciers &amp; ice caps</span></div>
+            <div><b>6 ± 2</b><span>Gt/yr² · GIC acceleration</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 04 MISSIONS ═══════════════════ -->
+  <section class="section missions" id="missions">
+    <div class="shell">
+      <div class="sec-head" data-reveal>
+        <span class="kicker"><i>04</i> MISSION TIMELINE</span>
+        <span class="sec-meta">2002 — 2030s</span>
+      </div>
+      <div class="section-intro" data-reveal>
+        <h2 class="display">The next<br><em>twenty years.</em></h2>
+        <p>
+          这条时间线列出会上反复提到的任务节点：GRACE、GRACE-FO、GRATTIS、GRACE-C，
+          以及 NGGM / MAGIC。
+        </p>
+      </div>
+
+      <div class="mission-line" data-reveal>
+        <div class="mission-track"></div>
+        <div class="mission-items" id="missionItems"></div>
+      </div>
+
+      <div class="mission-note" data-reveal>
+        <div><span class="mono">NOW</span><p>GRACE-FO 仍在轨，GRACE-C 进入 AIT。2026 年 Q4 的 RL07 是当前数据记录的一次大版本更新。</p></div>
+        <div><span class="mono">NEXT</span><p>GRATTIS（2027-02）验证 S-GRS；GRACE-C（2028-12）接续极轨对；NGGM / MAGIC 把倾角与多对编队带入 2030 年代。</p></div>
+        <div><span class="mono">THEN</span><p>如果 5 天 / 10 天产品成为常态，重力观测可以用于事件响应。这是水文和灾害社区今年提得最多的需求。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 05 WORLD ═══════════════════ -->
+  <section class="section world" id="world">
+    <div class="shell">
+      <div class="sec-head" data-reveal>
+        <span class="kicker"><i>05</i> THE WORLD OF GSTM</span>
+        <span class="sec-meta">AFFILIATION NETWORK · 21 COUNTRIES</span>
+      </div>
+      <div class="section-intro" data-reveal>
+        <h2 class="display">Where the work<br><em>comes from.</em></h2>
+        <p>
+          按摘要作者单位统计，美国 44 篇、德国 34 篇；法国 12 篇、荷兰 7 篇、奥地利 5 篇。
+          机构中 GFZ 19 篇、NASA JPL 17 篇、Toulouse / CNES 11 篇、UT Austin / CSR 8 篇。
+        </p>
+      </div>
+
+      <div class="world-grid">
+        <div class="map-panel" data-reveal>
+          <canvas id="mapCanvas" aria-label="按国家统计的 GSTM2026 摘要数量点阵地图"></canvas>
+          <div class="map-tooltip" id="mapTooltip"></div>
+          <div class="map-legend">
+            <span>1</span><i></i><i></i><i></i><i></i><span>44 papers</span>
+            <em>1.15° land grid · Natural Earth 110m</em>
+          </div>
+          <div class="map-foot">
+            <div><b>70</b><span>papers from US or Germany</span></div>
+            <div><b>4</b><span>institutions with ≥ 8 papers</span></div>
+            <div><b>21</b><span>countries resolved</span></div>
+          </div>
+        </div>
+
+        <div class="world-side" data-reveal>
+          <div class="world-tabs" role="tablist">
+            <button class="active" data-tab="countries" role="tab">COUNTRIES</button>
+            <button data-tab="institutions" role="tab">INSTITUTIONS</button>
+          </div>
+          <div class="rank-list" id="rankList"></div>
+          <p class="micro">Based on parsed affiliations of 91 active abstracts. 24 affiliation strings could not be resolved to a country and are excluded from country totals.</p>
+          <div class="world-facts">
+            <div><b>82</b><span>unique presenters</span></div>
+            <div><b>5.5</b><span>authors per abstract</span></div>
+            <div><b>1.4</b><span>countries per abstract (avg.)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 06 EXPLORER ═══════════════════ -->
+  <section class="section explore" id="explore">
+    <div class="shell">
+      <div class="sec-head" data-reveal>
+        <span class="kicker"><i>06</i> PROGRAMME EXPLORER</span>
+        <span class="sec-meta">91 ACTIVE CONTRIBUTIONS</span>
+      </div>
+      <div class="section-intro explore-intro" data-reveal>
+        <h2 class="display">Read the<br><em>programme.</em></h2>
+        <p>按 session、类型筛选，或搜索标题、作者和摘要全文。点开任意一条可以看完整摘要、作者单位和 DOI。</p>
+      </div>
+
+      <div class="explorer-toolbar" data-reveal>
+        <label class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M16.5 16.5L21 21"></path></svg>
+          <input type="search" id="searchInput" placeholder="搜索标题、作者、摘要…" autocomplete="off" />
+          <kbd>/</kbd>
+        </label>
+        <div class="filters" id="sessionFilters"></div>
+        <div class="type-toggle" id="typeToggle">
+          <button class="active" data-type="all">ALL</button>
+          <button data-type="Oral">ORAL</button>
+          <button data-type="Poster">POSTER</button>
+        </div>
+      </div>
+
+      <div class="explorer-meta">
+        <span id="resultCount">91 contributions</span>
+        <span id="activeFilter">ALL SESSIONS</span>
+      </div>
+
+      <div class="paper-grid" id="paperGrid"></div>
+      <div class="load-more-wrap"><button class="load-more" id="loadMore">LOAD MORE <span>+</span></button></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ 07 ARCHIVE ═══════════════════ -->
+  <section class="section archive" id="archive">
+    <div class="shell">
+      <div class="sec-head" data-reveal>
+        <span class="kicker"><i>07</i> ARCHIVE &amp; SOURCES</span>
+        <span class="sec-meta">DOWNLOAD EVERYTHING</span>
+      </div>
+      <div class="archive-grid">
+        <div class="archive-lead" data-reveal>
+          <h2 class="display">Take the<br><em>whole thing.</em></h2>
+          <p>
+            报告、摘要文本、结构化数据、地图点阵和自制图表已打包。原始网页和会议照片
+            不在公开包内，避免重复分发网站页面与人物照片。
+          </p>
+          <div class="archive-actions">
+            <a class="btn primary" href="downloads/GSTM2026_report.md" download>REPORT · 深度报告 <span>MD</span></a>
+            <a class="btn" href="downloads/gstm2026_dataset.json" download>DATASET · 结构化数据 <span>JSON</span></a>
+            <a class="btn" href="downloads/GSTM2026_data.zip" download>DATA PACK · 报告与数据 <span>ZIP</span></a>
+          </div>
+        </div>
+
+        <div class="download-list" data-reveal>
+          <a href="downloads/gstm2026_web_data.json" download><b>web_data.json</b><span>91 篇摘要 + session + 统计</span><i>↧</i></a>
+          <a href="downloads/map_dots.json" download><b>map_dots.json</b><span>11,697 个世界地图点阵</span><i>↧</i></a>
+          <a href="downloads/GSTM2026_programme.csv" download><b>programme.csv</b><span>95 条 · Excel 可读</span><i>↧</i></a>
+          <a href="assets/banner.svg" download><b>GSTM2026_banner.svg</b><span>会议官方视觉</span><i>↧</i></a>
+          <a href="downloads/GSTM2026_abstracts.pdf" download><b>GSTM2026_abstracts.pdf</b><span>91 篇摘要打印版</span><i>↧</i></a>
+        </div>
+      </div>
+
+      <div class="sources" data-reveal>
+        <div class="sources-head"><span>SOURCES &amp; METHOD</span><span>ACCESSED 2026-10-28</span></div>
+        <ol>
+          <li><a href="https://www.gstm-2026.eu/" target="_blank" rel="noopener">GSTM2026 官网</a> — 会议概述、参会统计、日程与视觉素材。</li>
+          <li><a href="https://meetingorganizer.copernicus.org/GSTM2026/" target="_blank" rel="noopener">Copernicus Meeting Organizer</a> — 10 个 session、95 篇摘要、作者与单位信息。</li>
+          <li>摘要全文与引用格式：Copernicus HTML abstracts，DOI 前缀 <span class="mono">10.5194/gstm2026-*</span>。</li>
+          <li>主题计数：对标题 + 摘要全文做正则匹配，多标签；数字为「提及该主题的论文数」，不是互斥分类。</li>
+          <li>国家 / 机构：解析作者单位字符串；24 条无法解析到国家的单位被排除，国家数为 21。</li>
+          <li>地图底图：Natural Earth 110m（public domain），点阵由脚本按 1.15° 网格采样生成。</li>
+          <li>Session 录像：Vimeo 链接仅对注册参会者开放，未纳入归档；录像 ID 保留在 sessions.json。</li>
+        </ol>
+      </div>
+
+      <div class="logos" data-reveal>
+        <span class="logo-text">GRACE-FO<br><em>NASA · GFZ</em></span>
+        <img src="assets/gfz-logo.svg" alt="GFZ Helmholtz Centre for Geosciences" />
+        <img src="assets/copernicus-logo.svg" alt="Copernicus Meetings" />
+      </div>
+
+      <p class="disclaimer">
+        本页面为独立研究整理，非会议官方发布。摘要 © 各作者，按
+        <a href="https://www.gstm-2026.eu/abstract-and-programme/licence-and-copyright.html" target="_blank" rel="noopener">CC BY 4.0</a>
+        许可使用；引用请以 DOI 原文为准。会议名称与标识归 GFZ / Copernicus 所有。
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="shell footer-inner">
+    <a class="footer-brand" href="#hero" data-scroll aria-label="回到顶部">GSTM<span>2026</span></a>
+    <div class="footer-meta">
+      <span>GRAVITY, IN MOTION</span>
+      <span>POTSDAM · 13—15 OCT 2026</span>
+      <span>COMPILED 2026-10-28</span>
+    </div>
+    <div class="footer-note">Built as a single-page research object · 91 abstracts, 10 sessions, one field.</div>
+  </div>
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>GRACE-C</span><i>·</i><span>NGGM</span><i>·</i><span>MAGIC</span><i>·</i><span>GRATTIS</span><i>·</i><span>LRI</span><i>·</i><span>RL07</span><i>·</i><span>COM-TG</span><i>·</i><span>C3S</span><i>·</i><span>SAGSA</span><i>·</i><span>10-DAY</span><i>·</i><span>5-DAY</span><i>·</i><span>TERRESTRIAL WATER</span><i>·</i>
+      <span>GRACE-C</span><i>·</i><span>NGGM</span><i>·</i><span>MAGIC</span><i>·</i><span>GRATTIS</span><i>·</i><span>LRI</span><i>·</i><span>RL07</span><i>·</i><span>COM-TG</span><i>·</i><span>C3S</span><i>·</i><span>SAGSA</span><i>·</i><span>10-DAY</span><i>·</i><span>5-DAY</span><i>·</i><span>TERRESTRIAL WATER</span><i>·</i>
+    </div>
+  </div>
+</footer>
+
+<dialog class="paper-dialog" id="paperDialog">
+  <button class="dialog-close" id="dialogClose" aria-label="关闭">×</button>
+  <div class="dialog-content" id="dialogContent"></div>
+</dialog>
+
+<noscript><div class="noscript">本页面需要 JavaScript 才能呈现交互图表与摘要检索。</div></noscript>
+
+<script src="data.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

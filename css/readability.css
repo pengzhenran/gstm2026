@@ -1,0 +1,180 @@
+/* ============================================================
+   READABILITY PASS 02
+   A larger, higher-contrast reading scale.
+   Root 19px; body copy 19–20px; metadata 13–15px.
+   Loaded after styles.css.
+   ============================================================ */
+
+html{font-size:19px}
+body{font-size:1rem;line-height:1.85}
+
+/* on-page type control */
+.type-control{position:fixed;right:20px;bottom:20px;z-index:95;font-family:var(--mono)}
+.type-handle{
+  width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--line-2);background:rgba(6,8,13,.88);color:var(--ink);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  font-size:.8rem;letter-spacing:.02em;transition:background .25s,color .25s,border-color .25s;
+}
+.type-handle:hover,.type-control.open .type-handle{background:var(--gold);color:#080808;border-color:var(--gold)}
+.type-panel{
+  position:absolute;right:0;bottom:56px;display:flex;align-items:center;gap:2px;
+  padding:5px;border:1px solid var(--line-2);background:rgba(6,8,13,.94);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-radius:100px;
+  opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .25s,transform .25s;
+}
+.type-control.open .type-panel{opacity:1;transform:none;pointer-events:auto}
+.type-panel button{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--ink);font-size:.8rem;transition:background .25s,color .25s}
+.type-panel button:hover{background:var(--gold);color:#080808}
+.type-panel span{min-width:46px;text-align:center;color:var(--muted);font-size:.68rem}
+@media (max-width:760px){.type-control{right:14px;bottom:14px}}
+
+/* chrome */
+.brand-text{font-size:1.24rem}
+.nav a{font-size:.9rem;white-space:nowrap}
+.nav a i{font-size:.66rem}
+.topbar-meta{font-size:.7rem;letter-spacing:.1em}
+.hero-top{font-size:.72rem}
+.hero-top-right{font-size:.68rem}
+.hero-lede{font-size:1.03rem;line-height:1.95;max-width:32em}
+.hs b{font-size:clamp(2rem,3.2vw,3.1rem)}
+.hs span{font-size:.72rem;line-height:1.55}
+.hs span em{font-size:.64rem;line-height:1.45}
+.hero-foot{font-size:.7rem}
+.hero-coord b{font-size:.72rem}
+.hero-coord span{font-size:.66rem}
+.kicker{font-size:.8rem}
+.sec-meta{font-size:.74rem;letter-spacing:.1em}
+.micro{font-size:.9rem;line-height:1.8}
+
+/* prologue */
+.aside-note{font-size:.98rem;line-height:1.95}
+.cn-title{font-size:1rem}
+.prologue-body > p:not(.lead){font-size:1.03rem;line-height:2}
+.section-intro p{font-size:1.03rem;line-height:1.95}
+.prologue-body .two-col p{font-size:1.02rem;line-height:1.95}
+.fact-grid dt{font-size:.72rem}
+.fact-grid dd{font-size:1.02rem}
+.fact-grid dd span{font-size:.9rem}
+.photo figcaption{font-size:.92rem;line-height:1.85}
+.photo figcaption span{font-size:.72rem}
+.pull cite{font-size:.72rem;line-height:1.75}
+
+/* programme */
+.session-row .code{font-size:.78rem}
+.session-row .name{font-size:1.02rem}
+.session-row .name small{font-size:.8rem}
+.session-row .num{font-size:1.5rem}
+.donut-center span{font-size:.68rem}
+.donut-center em{font-size:.7rem}
+.block-head span{font-size:.72rem}
+.tl-col h4{font-size:.74rem}
+.tl-hour span{font-size:.68rem}
+.tl-block{padding:6px 9px}
+.tl-block b{font-size:.74rem}
+.tl-block span{font-size:.84rem;line-height:1.3}
+.tl-block em{font-size:.7rem}
+.tl-block.compact b{font-size:.68rem}
+.tl-block.short em{display:none}
+.matrix .mh{font-size:.7rem;line-height:1.5}
+.matrix .mr{font-size:.74rem}
+.matrix .mc{font-size:.72rem}
+.matrix-legend{font-size:.68rem}
+
+/* observations */
+.sig-stat span{font-size:.72rem;line-height:1.65}
+.sig-kicker{font-size:.76rem}
+.signal-body p{font-size:1.05rem;line-height:1.95;max-width:38em}
+.sig-en{font-size:clamp(1.12rem,1.7vw,1.5rem)}
+.ev-label{font-size:.7rem}
+.chip{font-size:.74rem;padding:8px 13px}
+.mini-metrics b{font-size:clamp(1.8rem,2.6vw,2.35rem)}
+.mini-metrics span{font-size:.86rem;line-height:1.7}
+.fig-label{font-size:.7rem}
+.pipe span{font-size:.7rem}
+.pipeline-fig em{font-size:.66rem}
+.rung b{font-size:.74rem}
+.rung span{font-size:.8rem}
+.water-bar b{font-size:1.3rem}
+.water-bar span{font-size:.7rem;line-height:1.3}
+.layer b{font-size:.72rem}
+.layer span{font-size:.78rem}
+.mini-bar{font-size:.68rem;grid-template-columns:190px 1fr 30px}
+.cold-head span{font-size:.72rem}
+.cold-head em{font-size:1.3rem}
+.cold-grid p{font-size:.94rem;line-height:1.9}
+.interlude-kicker{font-size:.7rem}
+.interlude-grid p{font-size:1rem;line-height:1.95}
+.ice-stats span{font-size:.66rem}
+
+/* missions */
+.mission-item .my{font-size:.72rem}
+.mission-item p{font-size:.92rem;line-height:1.8}
+.mission-item em{font-size:.68rem}
+.mission-note .mono{font-size:.7rem}
+.mission-note p{font-size:.94rem;line-height:1.85}
+
+/* world */
+.world-tabs button{font-size:.72rem}
+.rank-row .ri{font-size:.62rem}
+.rank-row .rn{font-size:.92rem}
+.rank-row .rv{font-size:1.25rem}
+.world-facts span{font-size:.7rem;line-height:1.6}
+.map-legend{font-size:.66rem}
+.map-foot span{font-size:.66rem;line-height:1.6}
+.map-tooltip{font-size:.76rem}
+
+/* explorer */
+.search input{font-size:1.02rem}
+.search kbd{font-size:.68rem}
+.filters button{font-size:.74rem;padding:8px 11px}
+.type-toggle button{font-size:.7rem;padding:8px 12px}
+.explorer-meta{font-size:.72rem}
+.pc-top{font-size:.72rem}
+.pc-title{font-size:clamp(1.32rem,1.45vw,1.6rem);line-height:1.2}
+.pc-authors{font-size:.92rem;line-height:1.65}
+.pc-tags span{font-size:.72rem;padding:5px 8px}
+.load-more{font-size:.8rem}
+.empty-result span{font-size:.96rem}
+
+/* dialog */
+.dlg-kicker{font-size:.72rem}
+.dlg-authors{font-size:.92rem;line-height:1.8}
+.dlg-abs p{font-size:1.04rem;line-height:1.95}
+.dlg-aff{font-size:.84rem;line-height:1.75}
+.dlg-foot{font-size:.72rem}
+.dialog-close{font-size:1.6rem}
+
+/* archive + footer */
+.btn{font-size:.78rem;padding:19px 21px}
+.btn span{font-size:.62rem}
+.download-list b{font-size:.8rem}
+.download-list span{font-size:.74rem}
+.sources-head{font-size:.72rem}
+.sources ol{font-size:.96rem;line-height:1.9}
+.disclaimer{font-size:.84rem;line-height:1.9}
+.logo-text{font-size:.76rem}
+.logo-text em{font-size:.64rem}
+.footer-meta{font-size:.7rem}
+.footer-note{font-size:.84rem}
+.marquee-track{font-size:.7rem}
+
+@media (max-width:760px){
+  html{font-size:18px}
+  body{font-size:1rem}
+  .hero-lede{font-size:1rem}
+  .hs span{font-size:.7rem}
+  .hs span em{display:none}
+  .hero-foot{font-size:.62rem}
+  .prologue-body > p:not(.lead){font-size:1rem}
+  .prologue-body .two-col p{font-size:1rem}
+  .signal-body p{font-size:1.02rem}
+  .pc-title{font-size:1.36rem}
+  .pc-authors{font-size:.92rem}
+  .sources ol{font-size:.94rem}
+  .mission-item p{font-size:.9rem}
+  .cold-grid p{font-size:.92rem}
+  .mini-bar{grid-template-columns:150px 1fr 26px}
+  .nav a{font-size:.86rem}
+  .tl-block span{font-size:.78rem;line-height:1.25}
+}
